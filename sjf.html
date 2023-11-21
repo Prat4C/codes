@@ -1,0 +1,89 @@
+<html>
+  <body>
+    <main>
+      <p>
+        //SJF<br>
+        #include<stdio.h><br>
+        #include<stdbool.h><br>
+        struct process_struc{<br>
+	    int pid,at,bt,wt,tat,rt,start_time,ct;<br>
+	    bool isComplete;<br>
+        };<br>
+        int main(){<br>
+            int no_of_process;<br>
+            printf("Enter no of processes:");<br>
+            scanf("%d",&no_of_process);<br>
+            printf("**********Enter arrival and burst time info**********\n");<br>
+            struct process_struc process[no_of_process];<br>
+            for(int i = 0;i<no_of_process;i++){<br>
+                printf("Enter arrival time for process %d:",i+1);<br>
+                scanf("%d",&process[i].at);<br>
+                printf("Enter burst time for process %d:",i+1);<br>
+                scanf("%d",&process[i].bt);	<br>
+                process[i].pid = i+1;	<br>
+            }<br>
+            printf("PID\tArrival Time\tBurst Time\n");<br>
+            for(int i = 0;i<no_of_process;i++){<br>
+            printf("%d\t%d\t\t%d\n",process[i].pid,process[i].at,process[i].bt);<br>
+        }<br>
+        for(int i = 0;i<no_of_process;i++){<br>
+            process[i].isComplete = false;<br>
+        }<br>
+          for (int i = 0; i < no_of_process; i++) {<br>
+                for (int j = i + 1; j < no_of_process; j++) {<br>
+                    if (process[i].bt > process[j].bt || (process[i].bt == process[j].bt && process[i].at > process[j].at)) {<br>
+                        struct process_struc temp = process[i];<br>
+                        process[i] = process[j];<br>
+                        process[j] = temp;<br>
+                    }<br>
+                }<br>
+            }<br>
+        int completed = 0;<br>
+        int current_time = 0;<br>
+        printf("********************************************\n");<br>
+        while(completed!=no_of_process){<br>
+            int index = -1;<br>
+         for(int i = 0;i<no_of_process;i++)<br>
+         {<br>
+             if(process[i].isComplete == false){<br>
+                 if(process[i].at<=current_time){<br>
+                     current_time = current_time + process[i].bt;<br>
+                     process[i].ct = current_time;<br>
+                     process[i].isComplete = true;<br>
+                     process[i].wt = process[i].ct - process[i].bt - process[i].at;<br>
+                     completed++;<br>
+                     index = i;<br>
+                 }<br>
+             }<br>
+         }<br>
+         if(index == -1){<br>
+             current_time++;<br>
+         }	<br>
+        } <br>
+           for(int i = 0;i<no_of_process;i++){<br>
+                process[i].tat = process[i].ct-process[i].at;<br>
+            }<br>
+            printf("PID\tArrival Time\tBurst Time\tCompletion time\tTurnAround\tWaiting time\n");<br>
+            for (int i = 0; i < no_of_process; i++) {<br>
+                printf("%d\t%d\t\t%d\t\t%d\t\t  %d\t\t%d\n", process[i].pid, process[i].at, process[i].bt, process[i].ct,process[i].tat,process[i].wt);<br>
+            }<br>
+            int att = 0;<br>
+            for(int i = 0;i<no_of_process;i++){<br>
+                att = att + process[i].tat;<br>
+            }<br>
+            double ATT = att/no_of_process;<br>
+            printf("Average Turnaround Time:%0.2lf\n",ATT);<br>
+             int awt = 0;<br>
+            for(int i = 0;i<no_of_process;i++){<br>
+                awt = awt + process[i].wt;<br>
+            }<br>
+            double  AWT = (double)awt / no_of_process;<br>
+            printf("Average Waiting Time:%0.2lf\n",AWT);<br>
+            double  throughput = (double)no_of_process/process[no_of_process-1].ct;<br>
+            printf("throughput:%lf\n",throughput);<br>
+            return 0;<br>
+        }<br>
+      </p>
+    </main>
+  </body>
+</html>
